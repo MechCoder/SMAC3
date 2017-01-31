@@ -45,6 +45,7 @@ class ScenarioTest(unittest.TestCase):
         self.cs = ConfigurationSpace()
 
         self.test_scenario_dict = {'algo': 'echo Hello',
+                                   'abort_on_first_run_crash': 0,
                                    'paramfile':
                                        'test/test_files/scenario_test/param.pcs',
                                    'execdir': '.',

@@ -137,7 +137,9 @@ class SMAC(object):
                                          stats=self.stats,
                                          run_obj=scenario.run_obj,
                                          runhistory=runhistory,
-                                         par_factor=scenario.par_factor)
+                                         par_factor=scenario.par_factor,
+                                         abort_on_first_run_crash=
+                                            scenario.abort_on_first_run_crash)
         # Second case, the tae_runner is a function to be optimized
         elif callable(tae_runner):
             tae_runner = ExecuteTAFuncDict(ta=tae_runner,
@@ -145,7 +147,9 @@ class SMAC(object):
                                            run_obj=scenario.run_obj,
                                            memory_limit=scenario.memory_limit,
                                            runhistory=runhistory,
-                                           par_factor=scenario.par_factor)
+                                           par_factor=scenario.par_factor,
+                                           abort_on_first_run_crash=
+                                              scenario.abort_on_first_run_crash)
         # Third case, if it is an ExecuteTaRun we can simply use the
         # instance. Otherwise, the next check raises an exception
         elif not isinstance(tae_runner, ExecuteTARun):

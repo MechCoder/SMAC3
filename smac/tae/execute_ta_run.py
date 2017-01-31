@@ -54,7 +54,7 @@ class ExecuteTARun(object):
     """
 
     def __init__(self, ta, stats=None, runhistory=None, run_obj="runtime",
-                 par_factor=1):
+                 par_factor=1, abort_on_first_run_crash=True):
         """
         Constructor
 
@@ -70,6 +70,8 @@ class ExecuteTARun(object):
                 run objective of SMAC
             par_factor: int
                 penalization factor
+            abort_on_first_run_crash: bool
+                if true, abort if the first run returns CRASHED
         """
 
         self.ta = ta
@@ -78,6 +80,8 @@ class ExecuteTARun(object):
         self.run_obj = run_obj
 
         self.par_factor = par_factor
+
+        self.abort_on_first_run_crash = abort_on_first_run_crash
 
         self.logger = logging.getLogger(self.__class__.__name__)
         self._supports_memory_limit = False
@@ -129,7 +133,8 @@ class ExecuteTARun(object):
                                                           seed=seed,
                                                           instance_specific=instance_specific)
 
-        if self.stats.ta_runs == 0 and status == StatusType.CRASHED:
+        if (self.stats.ta_runs == 0 and self.abort_on_first_run_crash
+          and status == StatusType.CRASHED):
             self.logger.critical("First run crashed -- Abort")
             raise TAEAbortException()
         if status == StatusType.ABORT:
@@ -147,8 +152,6 @@ class ExecuteTARun(object):
                 cost = runtime
 
         self.logger.debug("Return: Status: %d, cost: %f, time. %f, additional: %s" % (
-            status.value, cost, runtime, str(additional_info)))
-        print("Return: Status: %d, cost: %f, time. %f, additional: %s" % (
             status.value, cost, runtime, str(additional_info)))
 
         if self.runhistory:
