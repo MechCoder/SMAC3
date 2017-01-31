@@ -135,7 +135,9 @@ class ExecuteTARun(object):
 
         if (self.stats.ta_runs == 0 and self.abort_on_first_run_crash
           and status == StatusType.CRASHED):
-            self.logger.critical("First run crashed -- Abort")
+            self.logger.critical("First run crashed, abort. (To prevent this, "
+                                 "toggle the 'abort_on_first_run_crash'"
+                                 "-option!)")
             raise TAEAbortException()
         if status == StatusType.ABORT:
             self.logger.critical("TAE reports Abort")

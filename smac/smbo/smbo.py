@@ -103,7 +103,13 @@ class SMBO(BaseSolver):
             The best found configuration
         '''
         self.stats.start_timing()
-        self.incumbent = self.initial_design.run()
+        try:
+            self.incumbent = self.initial_design.run()
+        except (TAEAbortException, BudgetExhaustedException):
+            self.logger.debug("Aborting in initial design run due to TAE"
+                              " (either ABORTed run or exhausted budget.")
+            return self.incumbent
+
 
         # Main BO loop
         iteration = 1
